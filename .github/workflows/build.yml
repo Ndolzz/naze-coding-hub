@@ -1,0 +1,71 @@
+name: Naze Coding Hub CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate project structure
+        run: |
+          test -f apps/client/package.json || (echo "apps/client/package.json hilang" && exit 1)
+          test -f apps/client/index.html || (echo "apps/client/index.html hilang" && exit 1)
+          test -f vercel.json || (echo "vercel.json hilang" && exit 1)
+          test -d api || (echo "folder api/ hilang" && exit 1)
+          echo "Struktur project valid."
+
+      - name: Lint
+        run: npm run lint -w apps/client
+
+      - name: Test (api/ pure logic + client components)
+        run: npm run test
+
+      - name: Security scan (no Mistral, no hardcoded secrets)
+        run: |
+          if grep -riE "mistral" --include="*.ts" --include="*.tsx" --include="*.json" . ; then
+            echo "Ditemukan referensi Mistral — dilarang. CI gagal."
+            exit 1
+          fi
+          if grep -rE "sk-ant-|AIzaSy|ghp_[A-Za-z0-9]{30,}" --include="*.ts" --include="*.tsx" . ; then
+            echo "Ditemukan pola hardcoded secret — dilarang. CI gagal."
+            exit 1
+          fi
+
+      - name: Dependency vulnerability scan (informational)
+        run: npm audit --audit-level=high || true
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build -w apps/client
+
+      - name: Validate build output
+        run: |
+          test -d apps/client/dist || (echo "Build gagal — folder dist tidak ada." && exit 1)
+          test -f apps/client/dist/index.html || (echo "Build tidak lengkap — dist/index.html hilang." && exit 1)
+          if [ -z "$(ls -A apps/client/dist)" ]; then
+            echo "Build output kosong."
+            exit 1
+          fi
+          echo "Build output valid ($(du -sh apps/client/dist | cut -f1))."
+
+      - name: Package & upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: naze-coding-hub-build
+          path: apps/client/dist

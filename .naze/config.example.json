@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "example-project",
+      "name": "My App",
+      "repoFullName": "your-username/my-app",
+      "defaultBranch": "main",
+      "createdAt": "2026-09-14T00:00:00.000Z"
+    }
+  ],
+  "settings": {
+    "editor": {
+      "fontSize": 14,
+      "tabSize": 2
+    },
+    "ai": {
+      "claudeModel": "claude-haiku-4-5-20251001",
+      "geminiModel": "gemini-3.6-flash",
+      "analyzerProvider": "gemini"
+    }
+  },
+  "memory": {
+    "codingPreferences": [],
+    "preferredWorkflow": []
+  }
+}

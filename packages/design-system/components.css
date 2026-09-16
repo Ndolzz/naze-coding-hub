@@ -1,0 +1,301 @@
+/**
+ * NAZE COMPONENTS — Phase 3
+ * Setiap elemen interaktif WAJIB punya state idle/hover/press/focus/disabled
+ * dan motion (spec §41-43). Import tokens.css sebelum file ini.
+ */
+
+/* ================= Button ================= */
+.naze-btn {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--naze-white);
+  background: var(--naze-black-soft);
+  border: 1px solid var(--naze-black-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-6);
+  cursor: pointer;
+  transition:
+    transform var(--duration-fast) var(--ease-spring),
+    border-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out);
+}
+
+.naze-btn--primary {
+  background: var(--naze-gradient);
+  border: none;
+  color: var(--naze-black);
+}
+
+.naze-btn:hover {
+  transform: translateY(-1px) scale(1.015);
+  border-color: var(--naze-purple);
+}
+
+.naze-btn:active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: var(--duration-fast);
+}
+
+.naze-btn:focus-visible {
+  outline: 2px solid var(--naze-blue);
+  outline-offset: 2px;
+}
+
+.naze-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.naze-btn--danger {
+  border-color: var(--naze-pink);
+  color: var(--naze-pink);
+}
+
+.naze-btn--danger:hover {
+  background: rgba(236, 72, 153, 0.1);
+}
+
+/* ================= Modal ================= */
+.naze-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.72);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  z-index: 100;
+  animation: naze-fade-in var(--duration-base) var(--ease-out);
+}
+
+.naze-modal-card {
+  max-width: 380px;
+  width: 100%;
+  transform: none !important; /* modal tidak perlu efek "scrap tilt" */
+  animation: naze-modal-in var(--duration-base) var(--ease-spring);
+}
+
+@keyframes naze-modal-in {
+  from { opacity: 0; transform: scale(0.94) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes naze-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ================= Page Transition (Phase 21) ================= */
+.naze-page-transition {
+  animation: naze-page-in var(--duration-slow) var(--ease-out) both;
+}
+
+@keyframes naze-page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= File row hover (Phase 21) ================= */
+.naze-file-row {
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.naze-file-row:hover {
+  background: var(--naze-black-soft);
+}
+
+/* ================= Toast (Phase 21) ================= */
+.naze-toast-stack {
+  position: fixed;
+  bottom: var(--space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  z-index: 200;
+  width: min(360px, 92vw);
+}
+
+.naze-toast {
+  background: var(--naze-black-soft);
+  border: 1px solid var(--naze-black-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-card-1);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  animation: naze-toast-in var(--duration-base) var(--ease-spring);
+}
+
+.naze-toast[data-leaving="true"] {
+  animation: naze-toast-out var(--duration-base) var(--ease-in-out) forwards;
+}
+
+@keyframes naze-toast-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes naze-toast-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(8px); }
+}
+
+/* ================= Tooltip (Phase 21) ================= */
+.naze-tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.naze-tooltip-bubble {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--naze-black);
+  border: 1px solid var(--naze-black-line);
+  color: var(--naze-white);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  padding: 0.3rem 0.55rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+}
+
+.naze-tooltip-wrap:hover .naze-tooltip-bubble,
+.naze-tooltip-wrap:focus-within .naze-tooltip-bubble {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Icon button — micro-interaction lebih halus karena ukurannya kecil */
+.naze-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--naze-white-dim);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-spring);
+}
+
+.naze-icon-btn:hover {
+  background: var(--naze-black-soft);
+  color: var(--naze-white);
+  transform: scale(1.08);
+}
+
+.naze-icon-btn:active {
+  transform: scale(0.92);
+}
+
+.naze-icon-btn:focus-visible {
+  outline: 2px solid var(--naze-blue);
+  outline-offset: 2px;
+}
+
+/* ================= Scrap Card ================= */
+/* Simulasi "kertas ditempel" tanpa keluar dari palet warna yang diizinkan */
+.naze-scrap-card {
+  position: relative;
+  background: var(--naze-black-soft);
+  border: 1px solid var(--naze-black-line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-card-1);
+  transform: rotate(var(--scrap-tilt, -0.6deg));
+  transition: transform var(--duration-base) var(--ease-spring), box-shadow var(--duration-base) var(--ease-out);
+}
+
+.naze-scrap-card:hover {
+  transform: rotate(0deg) translateY(-2px);
+  box-shadow: var(--shadow-card-2);
+}
+
+.naze-scrap-card::before {
+  /* aksen "washi tape" di pojok, dari gradient token */
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 24px;
+  width: 48px;
+  height: 14px;
+  background: var(--naze-gradient);
+  opacity: 0.85;
+  border-radius: 2px;
+  transform: rotate(-4deg);
+}
+
+/* ================= Tab Bar ================= */
+.naze-tab {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--naze-white-dim);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: color var(--duration-base) var(--ease-out), border-color var(--duration-base) var(--ease-out);
+}
+
+.naze-tab[data-active="true"] {
+  color: var(--naze-white);
+  border-bottom-color: var(--naze-purple);
+}
+
+.naze-tab:hover {
+  color: var(--naze-white);
+}
+
+/* ================= Input ================= */
+.naze-input {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--naze-white);
+  background: var(--naze-black);
+  border: 1px solid var(--naze-black-line);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  transition: border-color var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out);
+}
+
+.naze-input:focus-visible {
+  outline: none;
+  border-color: var(--naze-blue);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* ================= Loading (dipakai Naze Boot, Phase 4) ================= */
+@keyframes naze-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.naze-loading-dot {
+  animation: naze-pulse 1.1s var(--ease-in-out) infinite;
+}
+
+/* Dipakai di banyak layar untuk teks status loading (mis. "LOADING FILES...")
+   — sebelumnya dipakai tanpa definisi CSS sama sekali (spec §41: semua
+   elemen wajib bermotion, termasuk loading state). */
+.naze-status {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--naze-white-faint);
+  letter-spacing: 0.08em;
+  animation: naze-pulse 1.4s var(--ease-in-out) infinite;
+}

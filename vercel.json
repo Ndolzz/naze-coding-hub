@@ -1,0 +1,10 @@
+{
+  "buildCommand": "npm run build -w apps/client",
+  "outputDirectory": "apps/client/dist",
+  "installCommand": "npm install",
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}

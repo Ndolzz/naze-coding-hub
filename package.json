@@ -1,0 +1,19 @@
+{
+  "name": "naze-coding-hub",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w apps/client",
+    "build": "npm run build -w apps/client",
+    "lint": "npm run lint -w apps/client",
+    "test": "npm run test:api && npm run test -w apps/client",
+    "test:api": "vitest run --config vitest.api.config.ts"
+  },
+  "devDependencies": {
+    "vitest": "^2.0.5"
+  }
+}

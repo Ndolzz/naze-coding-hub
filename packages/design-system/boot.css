@@ -1,0 +1,88 @@
+/**
+ * NAZE BOOT — Phase 4 styles. Import setelah tokens.css.
+ */
+
+@keyframes naze-boot-reveal {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); filter: blur(6px); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes naze-boot-gradient-shift {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.naze-boot {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  background: var(--naze-black);
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.naze-boot-logo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  animation: naze-boot-reveal var(--duration-slow) var(--ease-out) both;
+}
+
+.naze-boot-logo-main {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 12vw, 4.5rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  background: var(--naze-gradient);
+  background-size: 200% auto;
+  animation: naze-boot-gradient-shift 3.2s linear infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: var(--leading-tight);
+}
+
+.naze-boot-logo-sub {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  letter-spacing: 0.3em;
+  color: var(--naze-white-dim);
+}
+
+.naze-boot-tagline {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--naze-white-faint);
+  letter-spacing: 0.15em;
+  margin: 0 0 var(--space-6);
+  animation: naze-boot-reveal var(--duration-slow) var(--ease-out) both;
+  animation-delay: 80ms;
+}
+
+.naze-boot-progress-track {
+  width: min(320px, 80vw);
+  height: 3px;
+  border-radius: 999px;
+  background: var(--naze-black-line);
+  overflow: hidden;
+}
+
+.naze-boot-progress-fill {
+  height: 100%;
+  background: var(--naze-gradient);
+  border-radius: 999px;
+  transition: width var(--duration-fast) var(--ease-out);
+}
+
+.naze-boot-meta {
+  width: min(320px, 80vw);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--naze-white-dim);
+  letter-spacing: 0.08em;
+}
