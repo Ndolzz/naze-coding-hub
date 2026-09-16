@@ -6,7 +6,10 @@ import { IconCheck, IconWarning, IconClaude, IconGemini } from "../../../../pack
  *
  * Alur per provider: SAVE (dev-only, lihat catatan di configure.ts)
  * → CHECKING (call /api/ai/validate, request sungguhan ke provider)
- * → CONNECTED / INVALID. Continue hanya aktif setelah KEDUA provider
+ * → CONNECTED / INVALID. Continue aktif setelah Gemini CONNECTED — Claude
+ * opsional (gate dilonggarkan atas permintaan user; analyzer default sudah
+ * Gemini, jadi Claude gak wajib buat mulai pakai Naze). Tetap Claude+Gemini
+ * only, cuma Claude gak lagi mandatory di step awal ini.
  * benar-benar tervalidasi — bukan cuma "field terisi".
  */
 
@@ -223,7 +226,13 @@ export default function NazeApiSetup({ onComplete }: { onComplete: () => void })
     }
   }
 
-  const systemReady = claudeValidation === "valid" && geminiValidation === "valid";
+  // Gate dilonggarkan atas permintaan user: cukup Gemini CONNECTED buat
+  // lanjut (karena analyzer default sudah Gemini, Claude gak pernah
+  // benar-benar dipanggil kecuali di-switch manual di Settings nanti).
+  // Tetap dalam aturan Claude+Gemini only — cuma urutan wajibnya diubah,
+  // bukan providernya.
+  const systemReady = geminiValidation === "valid";
+  const claudeOptionalNote = geminiValidation === "valid" && claudeValidation !== "valid";
 
   return (
     <main className="naze-shell" style={{ justifyContent: "flex-start", paddingTop: "3rem", gap: "1.25rem" }}>
@@ -290,8 +299,14 @@ export default function NazeApiSetup({ onComplete }: { onComplete: () => void })
           </p>
         )}
 
+        {claudeOptionalNote && (
+          <p style={{ textAlign: "center", fontSize: "var(--text-xs)", color: "var(--naze-white-faint)" }}>
+            Claude belum terhubung — gak masalah, analyzer default pakai Gemini. Bisa disambungkan kapan saja lewat Settings.
+          </p>
+        )}
+
         <button className="naze-btn naze-btn--primary" disabled={!systemReady} onClick={onComplete}>
-          {systemReady ? "Continue" : "Test kedua koneksi untuk lanjut"}
+          {systemReady ? "Continue" : "Test koneksi Gemini untuk lanjut"}
         </button>
       </div>
     </main>
