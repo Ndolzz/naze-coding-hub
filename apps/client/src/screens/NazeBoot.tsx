@@ -121,7 +121,8 @@ LOADING CORE",
           if ("serviceWorker" in navigator) {
             const reg = await navigator.serviceWorker.getRegistration().catch(() => undefined);
             if (!reg) {
-              console.info("Naze: service worker belum aktif (normal saat `npm run dev` — cuma aktif di build production).");
+              console.
+info("Naze: service worker belum aktif (normal saat `npm run dev` — cuma aktif di build production).");
             }
           }
         }
