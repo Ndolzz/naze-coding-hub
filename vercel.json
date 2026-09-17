@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm install && npm run build -w apps/client",
+  "buildCommand": "npm install && npm run build -w @naze-coding-hub/client",
   "outputDirectory": "apps/client/dist",
   "installCommand": "npm install"
 }
