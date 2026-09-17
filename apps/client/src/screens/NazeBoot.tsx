@@ -65,11 +65,12 @@ export default function NazeBoot({ onComplete }: NazeBootProps) {
         }
       },
       {
-        label: "LOADING CORE",
+        label: "
+LOADING CORE",
         target: 30,
         task: async () => {
           // Muat modul design-system secara nyata (bukan cuma delay).
-          await import("../../../../packages/design-system/tokens.ts");
+          await import("../../../../packages/design-system/tokens");
         }
       },
       {
